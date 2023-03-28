@@ -1,3 +1,4 @@
+'use strict'
 const { app, BrowserWindow } = require("electron");
 const a = require("electron");
 const path = require("path");

@@ -1,12 +1,14 @@
 <script setup lang="ts">
-import { ref, reactive, Ref, watch, computed, onMounted } from 'vue';
+import { ref, reactive, watch } from 'vue';
 import { useRouter } from 'vue-router';
 import type { TableColumnCtx } from 'element-plus'
-// import useUserList from './../login/userList.tsx'
-// import { List } from './../../types/index';
+// import useUserList from './../login/userList.jsx'
+// const useUserList = require('./../login/userList.jsx')
 const router = useRouter();
 
 // const userList = useUserList()
+// console.log(userList);
+
 // 根据用户拿到商品列表
 const user: any = router.currentRoute.value.query.admin ? router.currentRoute.value.query.admin : router.currentRoute.value.query.vip
 
@@ -45,9 +47,7 @@ if (router.currentRoute.value.query.admin) {
 } else {
     console.log('大会员登录');
     needUserList.value = JSON.parse(localStorage.getItem('needUserList') as string)
-    needUserList.value.forEach(el => {
-        console.log(el);
-
+    needUserList.value.forEach((el: string) => {
         // 循环用户列表，每个用户列表在loccalStorage里面都有一个对应的商品列表，没有就是空
         const listone = JSON.parse(localStorage.getItem(el) as string)
         console.log(listone);
@@ -180,13 +180,13 @@ const log = (e: any) => {
                     <el-table-column prop="name" label="商品" width="160" />
                     <el-table-column prop="count" label="数量" width="180">
                         <template #default="{ $index }">
-                            <el-input-number v-model="item[$index].count" :min="1" :max="100"
+                            <el-input-number :disabled="index" v-model="item[$index].count" :min="1" :max="100"
                                 @change="handleChange" />
                         </template>
                     </el-table-column>
                     <el-table-column prop="address" label="订单操作">
                         <template #default="{row, $index }">
-                            <el-button type="" @click="del(row, $index)">删除</el-button>
+                            <el-button :disabled="index" type="" @click="del(row, $index)">删除</el-button>
                         </template>
                     </el-table-column>
                     <el-table-column prop="price" label="单价" width="80" />

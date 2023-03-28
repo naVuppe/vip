@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, reactive, Ref, onMounted, computed } from 'vue';
 import router from './../../router';
-import loginUserFn from './userList'
+import loginUserFn from './userList.jsx'
 const loginUser = loginUserFn()
 
 const form = reactive({
@@ -78,6 +78,7 @@ const onSubmit = () => {
                     })
                 }).flat(1);
                 templist2.unshift(index)
+                console.log(templist2);
                 loginUser.setState(templist2)
                 localStorage.setItem('needUserList', JSON.stringify(templist2));
             }
@@ -92,16 +93,23 @@ const onSubmit = () => {
             if (userFrom.vip === '' || userFrom.admin === '') return
             let index = userList.value.find((item: any) => Object.keys(item)[0] === userFrom.vip);
             let thisindex = userList.value.findIndex((item: any) => Object.keys(item)[0] === userFrom.vip);
+            console.log(index)
             if (index === undefined) {
                 const newVip = {
                     [userFrom.vip]: [userFrom.admin]
                 }
                 userList.value.push(newVip);
             } else {
-                let index2 = Object.keys(index).find((item: any) => item === userFrom.admin);
-                const name = Object.keys(index)[0]
-                if (index2 === undefined) {
-                    console.log(index, name);
+                const name = Object.keys(index) as unknown as string;
+                let index2 = index[name].find((item: any) => {
+                    console.log(item, userFrom.admin);
+                    return item === userFrom.admin
+                });
+                console.log(index2);
+                if(index2 !== undefined) {
+                    alert('账户已经存在')
+                    return
+                } else {
                     userList.value[thisindex][name].push(userFrom.admin)
                 }
             }
